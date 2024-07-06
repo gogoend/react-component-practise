@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Button, Input, Form } from "antd";
+import { v4 as uuid } from "uuid";
 
 const nodeFactory = (parent) => ({
-  id: `${parent.value === "/" ? parent.id : parent.id + "/"}${
-    (parent.children ?? []).length + 1
-  }`,
+  id: `${parent.id}/${uuid()}`,
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
     (parent.children ?? []).length + 1
   }`,
@@ -19,14 +18,14 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   const handleInputChange = (e) => {
     setEditingState({
       ...node,
-      value: e.target.value
-    })
+      value: e.target.value,
+    });
   };
 
-  const [ editingState, setEditingState ] = useState(null)
+  const [editingState, setEditingState] = useState(null);
   const handleEdit = () => {
     setIsEditing(true);
-    setEditingState({...node})
+    setEditingState({ ...node });
   };
 
   const handleSave = (values) => {
@@ -61,14 +60,14 @@ const TreeNode = ({ node, onChange, onRemove }) => {
               display: "flex",
               justifyContent: "space-between",
               borderBottom: "1px solid #ccc",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Form.Item
               name="value"
               rules={[{ required: true, message: "Please enter a value" }]}
               style={{
-                flex: 1
+                flex: 1,
               }}
             >
               <Input
@@ -78,18 +77,17 @@ const TreeNode = ({ node, onChange, onRemove }) => {
                 autoFocus
               />
             </Form.Item>
-            <div
-              style={{marginBottom: '24px'}}
-            >
+            <div style={{ marginBottom: "24px" }}>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>
-              <Button htmlType="button" onClick={
-                () => {
-                  setIsEditing(false)
-                  setEditingState(null)
-                }
-              }>
+              <Button
+                htmlType="button"
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditingState(null);
+                }}
+              >
                 Cancel
               </Button>
             </div>
@@ -101,7 +99,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
             display: "flex",
             justifyContent: "space-between",
             borderBottom: "1px solid #ccc",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           {node.value}
@@ -131,7 +129,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
                   ...node,
                   children: updatedChildren,
                 });
-              }} 
+              }}
               onRemove={() => {
                 const updatedChildren = [...node.children].filter(
                   (it, i) => i !== index
@@ -169,24 +167,29 @@ const Tree = ({ data }) => {
   );
 };
 
-
-
 // Sample tree data
 const treeData = {
-  id: "/",
+  id: "95eec68e-6f94-4349-a4bd-196fd3b34409",
   value: "/",
   children: [
     {
-      id: "/1",
+      id: "95eec68e-6f94-4349-a4bd-196fd3b34409/fa91047f-8ec3-4c1c-a758-531988308a34",
       value: "/1",
-      children: [{ id: "/1/1" ,value: "/1/1" }, { id: "/1/2", value: "/1/2" }],
+      children: [
+        { id: "95eec68e-6f94-4349-a4bd-196fd3b34409/fa91047f-8ec3-4c1c-a758-531988308a34/675469fd-c1c8-433a-9ea0-407ea2b8acc9", value: "/1/1" },
+        { id: "95eec68e-6f94-4349-a4bd-196fd3b34409/fa91047f-8ec3-4c1c-a758-531988308a34/5361b0ae-b647-444c-8122-35dbfe25b144", value: "/1/2" },
+      ],
     },
     {
-      id: "/2",
+      id: "95eec68e-6f94-4349-a4bd-196fd3b34409/34361a03-4b4c-4fa7-8834-f3b7474936e4",
       value: "/2",
       children: [
-        { id: "/2/1", value: "/2/1" },
-        { id: "/2/2", value: "/2/2", children: [{ id: "/2/2/1", value: "/2/2/1" }] },
+        { id: "95eec68e-6f94-4349-a4bd-196fd3b34409/34361a03-4b4c-4fa7-8834-f3b7474936e4/be4f6d10-16b8-41fb-80fa-cbd68a6b533b", value: "/2/1" },
+        {
+          id: "95eec68e-6f94-4349-a4bd-196fd3b34409/34361a03-4b4c-4fa7-8834-f3b7474936e4/47feed19-898a-4555-b845-38e4c4e7fbea",
+          value: "/2/2",
+          children: [{ id: "95eec68e-6f94-4349-a4bd-196fd3b34409/34361a03-4b4c-4fa7-8834-f3b7474936e4/47feed19-898a-4555-b845-38e4c4e7fbea/7125f541-09b0-48ac-9732-841caed13c49", value: "/2/2/1" }],
+        },
       ],
     },
   ],

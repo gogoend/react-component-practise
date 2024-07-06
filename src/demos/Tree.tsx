@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Input } from 'antd';
 
 const nodeFactory = (parent) => ({
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
@@ -42,7 +43,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   return (
     <li>
       {isEditing ? (
-        <input
+        <Input
           type="text"
           value={value}
           onChange={handleInputChange}
@@ -55,19 +56,20 @@ const TreeNode = ({ node, onChange, onRemove }) => {
             display: "flex",
             justifyContent: "space-between",
             borderBottom: "1px solid #ccc",
+            alignItems: "center"
           }}
         >
           {node.value}
           <span style={{ marginLeft: "2em" }}>
             {node.value !== "/" ? (
-              <button onClick={handleEdit}>Edit</button>
+              <Button onClick={handleEdit}>Edit</Button>
             ) : null}
-            <button onClick={addChildren}>Add Children</button>
+            <Button onClick={addChildren}>Add Children</Button>
             {node.value !== "/" ? (
-              <button onClick={removeSelf}>Remove Self</button>
+              <Button onClick={removeSelf}>Remove Self</Button>
             ) : null}
             {node.children?.length ? (
-              <button onClick={emptyChildren}>Empty Children</button>
+              <Button onClick={emptyChildren}>Empty Children</Button>
             ) : null}
           </span>
         </div>

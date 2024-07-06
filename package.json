@@ -1,7 +1,7 @@
 {
   "name": "react.dev",
   "version": "0.0.0",
-  "main": "/src/index.js",
+  "main": "/src/index.tsx",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -13,5 +13,23 @@
     "react-dom": "^18.0.0",
     "react-scripts": "^5.0.0"
   },
-  "devDependencies": {}
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.3"
+  }
 }

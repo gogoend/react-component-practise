@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Button, Input, Form } from "antd";
+import { Button, Input } from 'antd';
 
 const nodeFactory = (parent) => ({
-  id: `${parent.value === "/" ? parent.value : parent.value + "/"}${
-    (parent.children ?? []).length + 1
-  }`,
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
     (parent.children ?? []).length + 1
   }`,
@@ -25,8 +22,8 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   };
 
   const handleSave = () => {
-    // setIsEditing(false);
-    // onChange({ ...node, value });
+    setIsEditing(false);
+    onChange({ ...node, value });
   };
 
   const addChildren = () => {
@@ -46,26 +43,20 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   return (
     <li>
       {isEditing ? (
-        <Form.Item
-          rules={[{ required: true }]}
-          validateTrigger="onBlur"
-          name={node.id}
-        >
-          <Input
-            type="text"
-            value={value}
-            onChange={handleInputChange}
-            onBlur={handleSave}
-            autoFocus
-          />
-        </Form.Item>
+        <Input
+          type="text"
+          value={value}
+          onChange={handleInputChange}
+          onBlur={handleSave}
+          autoFocus
+        />
       ) : (
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             borderBottom: "1px solid #ccc",
-            alignItems: "center",
+            alignItems: "center"
           }}
         >
           {node.value}
@@ -133,29 +124,21 @@ const Tree = ({ data }) => {
   );
 };
 
+
+
 // Sample tree data
 const treeData = {
-  id: "/",
   value: "/",
   children: [
     {
-      id: "/1",
       value: "/1",
-      children: [
-        { id: "/1/1", value: "/1/1" },
-        { id: "/1/2", value: "/1/2" },
-      ],
+      children: [{ value: "/1/1" }, { value: "/1/2" }],
     },
     {
-      id: "/2",
       value: "/2",
       children: [
-        { value: "/2/1", id: "/2/1" },
-        {
-          value: "/2/2",
-          id: "/2/2",
-          children: [{ value: "/2/2/1", id: "/2/2/1" }],
-        },
+        { value: "/2/1" },
+        { value: "/2/2", children: [{ value: "/2/2/1" }] },
       ],
     },
   ],
@@ -164,9 +147,7 @@ const treeData = {
 const TreeDemo = () => {
   return (
     <div>
-      <Form>
-        <Tree data={treeData} />
-      </Form>
+      <Tree data={treeData} />
     </div>
   );
 };

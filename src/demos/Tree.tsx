@@ -17,15 +17,21 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   const [value, setValue] = useState(node.value);
 
   const handleInputChange = (e) => {
-    setValue(e.target.value);
+    setEditingState({
+      ...node,
+      value: e.target.value
+    })
   };
 
+  const [ editingState, setEditingState ] = useState(null)
   const handleEdit = () => {
     setIsEditing(true);
+    setEditingState({...node})
   };
 
   const handleSave = (values) => {
     setIsEditing(false);
+    setEditingState(null);
     onChange({ ...node, value: values.value });
   };
 
@@ -47,7 +53,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
     <li>
       {isEditing ? (
         <Form
-          initialValues={{ value }}
+          initialValues={{ value: editingState.value }}
           onFinish={handleSave}
         >
           <div
@@ -78,7 +84,12 @@ const TreeNode = ({ node, onChange, onRemove }) => {
               <Button type="primary" htmlType="submit">
                 Save
               </Button>
-              <Button htmlType="button" onClick={() => setIsEditing(false)}>
+              <Button htmlType="button" onClick={
+                () => {
+                  setIsEditing(false)
+                  setEditingState(null)
+                }
+              }>
                 Cancel
               </Button>
             </div>
@@ -120,7 +131,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
                   ...node,
                   children: updatedChildren,
                 });
-              }}
+              }} 
               onRemove={() => {
                 const updatedChildren = [...node.children].filter(
                   (it, i) => i !== index

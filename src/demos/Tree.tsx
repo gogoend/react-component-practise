@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input } from 'antd';
+import { Button, Input, Form } from "antd";
 
 const nodeFactory = (parent) => ({
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
@@ -21,9 +21,9 @@ const TreeNode = ({ node, onChange, onRemove }) => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = (values) => {
     setIsEditing(false);
-    onChange({ ...node, value });
+    onChange({ ...node, value: values.value });
   };
 
   const addChildren = () => {
@@ -43,13 +43,44 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   return (
     <li>
       {isEditing ? (
-        <Input
-          type="text"
-          value={value}
-          onChange={handleInputChange}
-          onBlur={handleSave}
-          autoFocus
-        />
+        <Form
+          initialValues={{ value }}
+          onFinish={handleSave}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderBottom: "1px solid #ccc",
+              alignItems: "center"
+            }}
+          >
+            <Form.Item
+              name="value"
+              rules={[{ required: true, message: "Please enter a value" }]}
+              style={{
+                flex: 1
+              }}
+            >
+              <Input
+                type="text"
+                value={value}
+                onChange={handleInputChange}
+                autoFocus
+              />
+            </Form.Item>
+            <div
+              style={{marginBottom: '24px'}}
+            >
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+              <Button htmlType="button" onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Form>
       ) : (
         <div
           style={{

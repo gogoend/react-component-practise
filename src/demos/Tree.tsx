@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Button, Input, Form } from "antd";
 
 const nodeFactory = (parent) => ({
+  id: `${parent.value === "/" ? parent.id : parent.id + "/"}${
+    (parent.children ?? []).length + 1
+  }`,
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
     (parent.children ?? []).length + 1
   }`,
@@ -107,7 +110,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
       )}
       {node.children &&
         node.children.map((child, index) => (
-          <ul key={index}>
+          <ul key={child.id}>
             <TreeNode
               node={child}
               onChange={(newNode) => {
@@ -159,17 +162,20 @@ const Tree = ({ data }) => {
 
 // Sample tree data
 const treeData = {
+  id: "/",
   value: "/",
   children: [
     {
+      id: "/1",
       value: "/1",
-      children: [{ value: "/1/1" }, { value: "/1/2" }],
+      children: [{ id: "/1/1" ,value: "/1/1" }, { id: "/1/2", value: "/1/2" }],
     },
     {
+      id: "/2",
       value: "/2",
       children: [
-        { value: "/2/1" },
-        { value: "/2/2", children: [{ value: "/2/2/1" }] },
+        { id: "/2/1", value: "/2/1" },
+        { id: "/2/2", value: "/2/2", children: [{ id: "/2/2/1", value: "/2/2/1" }] },
       ],
     },
   ],

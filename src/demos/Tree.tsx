@@ -158,10 +158,10 @@ const Tree = ({ data }) => {
     <>
       <h2>Tree Editor</h2>
       <div style={{ display: "flex" }}>
-        <ul>
+        <ul style={{ flex: 1 }}>
           <TreeNode node={tree} onChange={handleNodeChange} />
         </ul>
-        <pre>{JSON.stringify(tree, "", 1)}</pre>
+        <pre style={{ width: '600px', overflow: 'auto' }}>{JSON.stringify(tree, "", 1)}</pre>
       </div>
     </>
   );

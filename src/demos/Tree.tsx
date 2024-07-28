@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Button, Input, Form } from "antd";
 import { v4 as uuid } from "uuid";
 
-const nodeFactory = (parent) => ({
+interface INode {
+  id: string;
+  value: string;
+  children?: INode[];
+}
+
+const nodeFactory = (parent: INode) => ({
   id: `${parent.id}/${uuid()}`,
   value: `${parent.value === "/" ? parent.value : parent.value + "/"}${
     (parent.children ?? []).length + 1
@@ -11,24 +17,29 @@ const nodeFactory = (parent) => ({
 });
 
 // Node component
-const TreeNode = ({ node, onChange, onRemove }) => {
+interface ITreeNodeProp {
+  node: INode;
+  onChange: (node: INode) => void;
+  onRemove?: () => void;
+}
+const TreeNode = ({ node, onChange, onRemove }: ITreeNodeProp) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(node.value);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditingState({
       ...node,
       value: e.target.value,
     });
   };
 
-  const [editingState, setEditingState] = useState(null);
+  const [editingState, setEditingState] = useState<null | INode>(null);
   const handleEdit = () => {
     setIsEditing(true);
     setEditingState({ ...node });
   };
 
-  const handleSave = (values) => {
+  const handleSave = (values: { value: string }) => {
     setIsEditing(false);
     setEditingState(null);
     onChange({ ...node, value: values.value });
@@ -41,7 +52,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
   };
 
   const removeSelf = () => {
-    onRemove();
+    onRemove?.();
   };
 
   const emptyChildren = () => {
@@ -52,7 +63,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
     <li>
       {isEditing ? (
         <Form
-          initialValues={{ value: editingState.value }}
+          initialValues={{ value: editingState!.value }}
           onFinish={handleSave}
         >
           <div
@@ -123,7 +134,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
             <TreeNode
               node={child}
               onChange={(newNode) => {
-                const updatedChildren = [...node.children];
+                const updatedChildren = [...node.children ?? []];
                 updatedChildren[index] = newNode;
                 onChange({
                   ...node,
@@ -131,7 +142,7 @@ const TreeNode = ({ node, onChange, onRemove }) => {
                 });
               }}
               onRemove={() => {
-                const updatedChildren = [...node.children].filter(
+                const updatedChildren = [...node.children ?? []].filter(
                   (it, i) => i !== index
                 );
                 onChange({
@@ -147,10 +158,13 @@ const TreeNode = ({ node, onChange, onRemove }) => {
 };
 
 // Tree component
-const Tree = ({ data }) => {
+interface ITreeProp {
+  data: INode;
+}
+const Tree = ({ data }: ITreeProp) => {
   const [tree, setTree] = useState(data);
 
-  const handleNodeChange = (newNode) => {
+  const handleNodeChange = (newNode: INode) => {
     setTree(newNode);
   };
 
@@ -161,7 +175,7 @@ const Tree = ({ data }) => {
         <ul style={{ flex: 1 }}>
           <TreeNode node={tree} onChange={handleNodeChange} />
         </ul>
-        <pre style={{ width: '600px', overflow: 'auto' }}>{JSON.stringify(tree, "", 1)}</pre>
+        <pre style={{ width: '600px', overflow: 'auto' }}>{JSON.stringify(tree, null, 1)}</pre>
       </div>
     </>
   );
